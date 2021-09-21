@@ -6,7 +6,7 @@ Module to add Increazy API in Magento 2.3.X, follow the installation steps:
 2. Execute:
 
 ```bash
-bin/magento module:enable Increazy_Checkout
+php bin/magento module:enable Increazy_Checkout
 php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy -f
 ```
