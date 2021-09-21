@@ -7,7 +7,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 abstract class Controller extends Action
 {
-    const HASH = '484625ce159b74746a7f966e671ac2c4';
+    const HASH = '{token}';
 
     /**
      * @var StoreManagerInterface
@@ -67,11 +67,12 @@ abstract class Controller extends Action
     public function hashDecode($str)
     {
         $token = base64_decode(self::HASH);
-		$parts = explode(':', $token);
-		$key = hash('sha256', $parts[0]);
-		$iv = substr(hash('sha256', $parts[1]), 0, 16);
+        $parts = explode(':', $token);
+        $key = substr(hash('sha256', $parts[0]), 0, 32);
+        $iv = substr(hash('sha256', $parts[1]), 0, 16);
 
-		return openssl_decrypt(base64_decode($str), "AES-256-CBC", $key, 0, $iv);
+        $encrypted_data = openssl_encrypt($str, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+        return base64_encode($encrypted_data);
     }
 
     public function hashEncode($str)
@@ -79,11 +80,12 @@ abstract class Controller extends Action
         if ($str == '') return '';
         $token = base64_decode(self::HASH);
         $parts = explode(':', $token);
-        $key = hash('sha256', $parts[0]);
+        $key = substr(hash('sha256', $parts[0]), 0, 32);
         $iv = substr(hash('sha256', $parts[1]), 0, 16);
 
-        $output = openssl_encrypt($str, "AES-256-CBC", $key, 0, $iv);
-        return base64_encode($output);
+        $str = base64_decode($str);
+        $data = openssl_decrypt($str, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+        return $data;
     }
 
     public abstract function action($body);
