@@ -64,8 +64,9 @@ abstract class Controller extends Action
         throw new \Exception($msg);
     }
 
-    public function hashDecode($str)
+    public function hashEncode($str)
     {
+        if ($str == '') return '';
         $token = base64_decode(self::HASH);
         $parts = explode(':', $token);
         $key = substr(hash('sha256', $parts[0]), 0, 32);
@@ -75,7 +76,7 @@ abstract class Controller extends Action
         return base64_encode($encrypted_data);
     }
 
-    public function hashEncode($str)
+    public function hashDecode($str)
     {
         if ($str == '') return '';
         $token = base64_decode(self::HASH);

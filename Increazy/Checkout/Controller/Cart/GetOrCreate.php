@@ -7,11 +7,16 @@ use Magento\Framework\App\Action\Context;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Quote\Model\Quote;
 
 class GetOrCreate extends Controller
 {
     /**
      * @var QuoteFactory
+     */
+    private $quoteFactory;
+    /**
+     * @var Quote
      */
     private $quote;
     /**
@@ -21,11 +26,13 @@ class GetOrCreate extends Controller
 
     public function __construct(
         Context $context,
-        QuoteFactory $quote,
+        QuoteFactory $quoteFactory,
+        Quote $quote,
         CustomerRepositoryInterface $customer,
         StoreManagerInterface $store
     )
     {
+        $this->quoteFactory = $quoteFactory;
         $this->quote = $quote;
         $this->customer = $customer;
         parent::__construct($context, $store);
@@ -40,17 +47,20 @@ class GetOrCreate extends Controller
     {
         $quote = null;
 
-        if (isset($body->quote_id)) {
-            $quote = $this->quote->create()->load($body->quote_id);
+        if (($body->quote_id ?? '') !== '') {
+         $this->quote->load($body->quote_id);
+         $quote = $this->quote;
         } else {
-            $quote = $this->quote->create();
+            $quote = $this->quoteFactory->create();
         }
 
-        if (!empty($body->token ?? '')) {
+        if (($body->token ?? '') !== '') {
             $customerId = $this->hashDecode($body->token);
             $customer = $this->customer->getById($customerId);
             $quote->assignCustomer($customer);
         }
+
+        $quote->setStoreId($body->store);
 
         $quote->collectTotals()->save();
 

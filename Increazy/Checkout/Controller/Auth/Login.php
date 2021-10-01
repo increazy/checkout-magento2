@@ -37,6 +37,8 @@ class Login extends Controller
         return [
             'customer' => $this->customer->getData(),
             'token'    => $this->hashEncode($this->customer->getId()),
+            'id'       => $this->customer->getId(),
+            'test'     => $this->hashEncode('17'),
         ];
     }
 }
