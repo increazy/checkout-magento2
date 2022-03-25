@@ -34,13 +34,18 @@ class Recovery extends Controller
 
     public function validate($body)
     {
-        return isset($body->token) &&  isset($body->password);
+        return isset($body->email) && isset($body->password);
     }
 
     public function action($body)
     {
         $this->customer->setWebsiteId($this->store->getStore()->getWebsiteId());
-        $this->customer->load($this->hashDecode($body->token));
+
+        $this->customer->loadByEmail($this->hashDecode($body->email));
+
+        if (!$this->customer->getId()) {
+            $this->error('customer.exists');
+        }
 
         $this->customer->setData('password_hash', $this->encryptor->getHash($body->password));
         $this->customer->save();

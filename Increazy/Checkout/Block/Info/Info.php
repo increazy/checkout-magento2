@@ -21,10 +21,6 @@ class Info extends \Magento\Payment\Block\Info
         $info = (array)$this->getInfo()->getAdditionalInformation();
         $data = $info['infos'];
 
-        if (!isset($data['pay_method']) || !isset($data['status']) || !isset($data['response'])) {
-            return '';
-        }
-
         $method = $this->getMethodLabel($data['pay_method']);
         $status = $this->getCheckouttatus($data['status']);
 
