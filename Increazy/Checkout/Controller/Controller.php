@@ -50,11 +50,11 @@ abstract class Controller extends Action
             }
 
             $response = $this->action($body);
-            die(json_encode($response));
+            echo json_encode($response);
         } catch (\Exception $e) {
-            die(json_encode([
+            echo json_encode([
                 'message' => $e->getMessage(),
-            ]));
+            ]);
         }
     }
 
