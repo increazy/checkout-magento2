@@ -40,6 +40,16 @@ class Info extends \Magento\Payment\Block\Info
             }
         }
 
+        if (isset($data['custom_inputs'])) {
+            if (count($data['custom_inputs']) > 0) {
+                $lines .= '<tr><th colspan="2" style="font-size:18px;text-align:center;padding: 16px 0px;"><b>Campos adicionais</b></th></tr>';
+            }
+
+            foreach ($data['custom_inputs'] as $key => $value) {
+                $lines .= $this->createLine($key, $value);
+            }
+        }
+
         return $this->generateHTML([
             'method'  => $method,
             'status'  => $status,
