@@ -61,8 +61,6 @@ if ($enabledOnetap) {
                 customerId = localStorage.getItem('increazy-token');
             }
 
-            console.log('customerId', customerId);
-
             if (![undefined, null, ''].includes(customerId)) {
                 var increazyOnetapButton = document.getElementById('increazy-onetap-btn');
                 if (increazyOnetapButton) {
