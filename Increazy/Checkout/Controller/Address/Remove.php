@@ -5,6 +5,7 @@ use Increazy\Checkout\Controller\Controller;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Remove extends Controller
@@ -22,12 +23,13 @@ class Remove extends Controller
         Context $context,
         Address $address,
         Customer $customer,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->customer = $customer;
         $this->address = $address;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)
@@ -39,7 +41,7 @@ class Remove extends Controller
     {
         $this->address->load($body->address_id)->delete();
 
-        $all = new All($this->context, $this->customer, $this->store);
+        $all = new All($this->context, $this->customer, $this->store, $this->scopeConfig);
         return $all->action($body);
     }
 }

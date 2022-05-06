@@ -4,6 +4,7 @@ namespace Increazy\Checkout\Controller\Cart;
 use Increazy\Checkout\Controller\Controller;
 use Increazy\Checkout\Helpers\CompleteQuote;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -17,11 +18,12 @@ class Change extends Controller
     public function __construct(
         Context $context,
         Quote $quote,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->quote = $quote;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)

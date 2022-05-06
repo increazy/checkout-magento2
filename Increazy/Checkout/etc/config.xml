@@ -4,6 +4,20 @@
     xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd"
 >
     <default>
+        <increazy_checkout>
+            <button>
+                <class>button btn primary action</class>
+            </button>
+        </increazy_checkout>
+
+        <increazy_onetap>
+            <general>
+                <text>Compra com 1 clique</text>
+                <class>button btn primary action</class>
+                <container_class>container row</container_class>
+            </general>
+        </increazy_onetap>
+
         <payment>
             <increazy-billet>
                 <active>1</active>
@@ -36,7 +50,7 @@
                 <active>1</active>
                 <model>Increazy\Checkout\Model\Onetap</model>
                 <order_status>pending</order_status>
-                <title>Cartão de Crédito (1 clique)</title>
+                <title>Cartão de Crédito Salvo</title>
                 <allowspecific>0</allowspecific>
                 <group>increazy</group>
             </increazy-onetap>

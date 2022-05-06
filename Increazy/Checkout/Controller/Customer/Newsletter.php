@@ -3,6 +3,7 @@ namespace Increazy\Checkout\Controller\Customer;
 
 use Increazy\Checkout\Controller\Controller;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -17,12 +18,13 @@ class Newsletter extends Controller
     public function __construct(
         Context $context,
         Subscriber $subscriber,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->subscriber = $subscriber;
 
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)

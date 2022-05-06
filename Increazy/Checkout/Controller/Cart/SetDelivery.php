@@ -5,6 +5,7 @@ use Increazy\Checkout\Controller\Controller;
 use Increazy\Checkout\Helpers\CompleteQuote;
 use Magento\Customer\Model\Address;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Store\Model\StoreManagerInterface;
@@ -29,13 +30,14 @@ class SetDelivery extends Controller
         Address $address,
         QuoteAddress $quoteAddress,
         Quote $quote,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->address = $address;
         $this->quote = $quote;
         $this->quoteAddress = $quoteAddress;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)

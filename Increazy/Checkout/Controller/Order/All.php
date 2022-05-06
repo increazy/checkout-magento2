@@ -3,6 +3,7 @@ namespace Increazy\Checkout\Controller\Order;
 
 use Increazy\Checkout\Controller\Controller;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -16,11 +17,12 @@ class All extends Controller
     public function __construct(
         Context $context,
         CollectionFactory  $collection,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->collection = $collection;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)

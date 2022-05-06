@@ -25,18 +25,28 @@ class Info extends \Magento\Payment\Block\Info
         $status = $this->getCheckouttatus($data['status']);
 
         $lines = '';
+
+        if (isset($data['order'])) {
+            $lines .= $this->createLine('ID da transação', $data['order']);
+        }
+
         if (isset($data['response']['url'])) {
             $url = $data['response']['url'];
 
-            $lines .= $this->createLine('URL', "<a href='$url'>Acessar</a>");
+            $lines .= $this->createLine('URL', "<a href='$url' target='_blank'>Acessar</a>");
 
             if (strtolower($method) === 'pix') {
                 $lines .= $this->createLine('QrCode', "<img src='$url' style='width:200px;height:200px'/>");
             }
 
-
             if (isset($data['response']['expiration'])) {
                 $lines .= $this->createLine('Vencimento', $data['response']['expiration']);
+            }
+        }
+
+        if (isset($data['internal_order']['details'])) {
+            if (isset($data['internal_order']['details']['card'])) {
+                $lines .= $this->createLine('4 últimos dígitos', $data['internal_order']['details']['card']);
             }
         }
 
@@ -46,7 +56,14 @@ class Info extends \Magento\Payment\Block\Info
             }
 
             foreach ($data['custom_inputs'] as $key => $value) {
-                $lines .= $this->createLine($key, $value);
+
+                if (substr($value, 0, 4) === "http") {
+                    $lines .= $this->createLine($key, "<a href='$value' target='_blank'>Ver</a>");
+                } else if (substr($value, 0, 1) === "#" && strlen($value) < 8) {
+                    $lines .= $this->createLine($key, "<span style='background: $value;width: 16px;height:16px;border-radius:50vh;display:inline-block;'></span> $value");
+                } else {
+                    $lines .= $this->createLine($key, $value);
+                }
             }
         }
 

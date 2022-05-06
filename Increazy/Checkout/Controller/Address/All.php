@@ -4,6 +4,7 @@ namespace Increazy\Checkout\Controller\Address;
 use Increazy\Checkout\Controller\Controller;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 class All extends Controller
@@ -16,11 +17,12 @@ class All extends Controller
     public function __construct(
         Context $context,
         Customer $customer,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->customer = $customer;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)

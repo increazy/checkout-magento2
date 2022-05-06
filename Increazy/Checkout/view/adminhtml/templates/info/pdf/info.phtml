@@ -1,8 +1,0 @@
-<?= $block->escapeHtml($block->getMethod()->getTitle()) ?>
-    {{pdf_row_separator}}
-<?php if ($block->getInfo()->getAdditionalInformation()): ?>
-    {{pdf_row_separator}}
-    <?= /* @noEscape */ nl2br($block->getInfo()->getAdditionalInformation()) ?>
-    {{pdf_row_separator}}
-<?php endif; ?>
-rsd1

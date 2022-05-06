@@ -4,6 +4,7 @@ namespace Increazy\Checkout\Controller\Auth;
 use Increazy\Checkout\Controller\Controller;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Customer;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Connect extends Controller
@@ -13,10 +14,15 @@ class Connect extends Controller
      */
     private $customer;
 
-    public function __construct(Context $context, Customer $customer, StoreManagerInterface $store)
+    public function __construct(
+        Context $context,
+        Customer $customer,
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
+    )
     {
         $this->customer = $customer;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)

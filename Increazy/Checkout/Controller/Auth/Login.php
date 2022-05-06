@@ -4,6 +4,8 @@ namespace Increazy\Checkout\Controller\Auth;
 use Increazy\Checkout\Controller\Controller;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Login extends Controller
@@ -13,10 +15,15 @@ class Login extends Controller
      */
     private $customer;
 
-    public function __construct(Context $context, Customer $customer, StoreManagerInterface $store)
+    public function __construct(
+        Context $context,
+        Customer $customer,
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
+    )
     {
         $this->customer = $customer;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)
@@ -33,6 +40,11 @@ class Login extends Controller
         if (!$logged) {
             $this->error('customer.credentials');
         }
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $customer = $objectManager->create('Magento\Customer\Model\Customer')->load($this->customer->getId());
+        $customerSession = $objectManager->create('Magento\Customer\Model\Session');
+        $customerSession->setCustomerAsLoggedIn($customer);
 
         return [
             'customer' => $this->customer->getData(),

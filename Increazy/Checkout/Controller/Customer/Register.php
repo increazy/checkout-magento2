@@ -4,6 +4,7 @@ namespace Increazy\Checkout\Controller\Customer;
 use Increazy\Checkout\Controller\Controller;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Customer;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -23,13 +24,14 @@ class Register extends Controller
         Context $context,
         Customer $customer,
         StoreManagerInterface $store,
-        Encryptor $encryptor
+        Encryptor $encryptor,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->customer = $customer;
         $this->encryptor = $encryptor;
 
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)

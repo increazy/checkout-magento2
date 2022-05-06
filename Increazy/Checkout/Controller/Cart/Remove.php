@@ -5,6 +5,7 @@ use Increazy\Checkout\Controller\Controller;
 use Increazy\Checkout\Helpers\CompleteQuote;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -23,12 +24,13 @@ class Remove extends Controller
         Context $context,
         Quote $quote,
         Product $product,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->quote = $quote;
         $this->product = $product;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)

@@ -6,6 +6,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteManagement;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sales\Model\Order;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -29,13 +30,14 @@ class Finish extends Controller
         QuoteManagement $quoteManagement,
         CustomerRepositoryInterface $customer,
         Quote $quote,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->quoteManagement = $quoteManagement;
         $this->quote = $quote;
         $this->customer = $customer;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)

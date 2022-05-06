@@ -6,6 +6,7 @@ use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Directory\Model\ResourceModel\Region\Collection;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Create extends Controller
@@ -29,13 +30,14 @@ class Create extends Controller
         Address $address,
         Customer $customer,
         Collection $collection,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->collection = $collection;
         $this->address = $address;
         $this->customer = $customer;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)
@@ -63,7 +65,7 @@ class Create extends Controller
 
         $this->address->save();
 
-        $all = new All($this->context, $this->customer, $this->store);
+        $all = new All($this->context, $this->customer, $this->store, $this->scopeConfig);
         return $all->action($body);
     }
 }

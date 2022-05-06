@@ -7,6 +7,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Add extends Controller
 {
@@ -24,12 +25,13 @@ class Add extends Controller
         Context $context,
         Quote $quote,
         Product $product,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->quote = $quote;
         $this->product = $product;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)

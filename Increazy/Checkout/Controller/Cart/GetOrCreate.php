@@ -7,6 +7,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote;
 
 class GetOrCreate extends Controller
@@ -29,13 +30,14 @@ class GetOrCreate extends Controller
         QuoteFactory $quoteFactory,
         Quote $quote,
         CustomerRepositoryInterface $customer,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->quoteFactory = $quoteFactory;
         $this->quote = $quote;
         $this->customer = $customer;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)
@@ -58,6 +60,11 @@ class GetOrCreate extends Controller
             $customerId = $this->hashDecode($body->token);
             $customer = $this->customer->getById($customerId);
             $quote->assignCustomer($customer);
+
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $customer = $objectManager->create('Magento\Customer\Model\Customer')->load($customerId);
+            $customerSession = $objectManager->create('Magento\Customer\Model\Session');
+            $customerSession->setCustomerAsLoggedIn($customer);
         }
 
         $quote->setStoreId($body->store);

@@ -3,6 +3,7 @@ namespace Increazy\Checkout\Controller\Payment;
 
 use Increazy\Checkout\Controller\Controller;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Sales\Model\Service\InvoiceService;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
@@ -40,7 +41,8 @@ class Status extends Controller
         Order $orderModel,
         InvoiceSender $invoiceSender,
         Transaction $transaction,
-        StoreManagerInterface $store
+        StoreManagerInterface $store,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->invoiceService = $invoiceService;
@@ -48,7 +50,7 @@ class Status extends Controller
         $this->orderModel = $orderModel;
         $this->transaction = $transaction;
         $this->invoiceSender = $invoiceSender;
-        parent::__construct($context, $store);
+        parent::__construct($context, $store, $scopeConfig);
     }
 
     public function validate($body)

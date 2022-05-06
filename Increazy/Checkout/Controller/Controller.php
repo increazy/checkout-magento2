@@ -3,24 +3,30 @@ namespace Increazy\Checkout\Controller;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
+use \Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 abstract class Controller extends Action
 {
-    const HASH = '{token}';
+    // const HASH = 'ZDk5MmQ3N2M0ODE0OWUyMGI0ODI2NjIzZTVlNmQ5ZTE6ODAwM2Q3M2E4MmUxMGNiN2EyMzNlMDI0ZTBkZmQ0OWY=';
 
     /**
      * @var StoreManagerInterface
      */
     protected $store;
     /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+    /**
      * @var Context
      */
     protected $context;
 
-    public function __construct(Context $context, StoreManagerInterface $store) {
+    public function __construct(Context $context, StoreManagerInterface $store, ScopeConfigInterface $scopeConfig) {
         $this->context = $context;
         $this->store = $store;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -64,10 +70,15 @@ abstract class Controller extends Action
         throw new \Exception($msg);
     }
 
+    private function getHash()
+    {
+        return $this->scopeConfig->getValue('increazy_general/general/hash', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    }
+
     public function hashEncode($str)
     {
         if ($str == '') return '';
-        $token = base64_decode(self::HASH);
+        $token = base64_decode($this->getHash());
         $parts = explode(':', $token);
         $key = substr(hash('sha256', $parts[0]), 0, 32);
         $iv = substr(hash('sha256', $parts[1]), 0, 16);
@@ -79,7 +90,7 @@ abstract class Controller extends Action
     public function hashDecode($str)
     {
         if ($str == '') return '';
-        $token = base64_decode(self::HASH);
+        $token = base64_decode($this->getHash());
         $parts = explode(':', $token);
         $key = substr(hash('sha256', $parts[0]), 0, 32);
         $iv = substr(hash('sha256', $parts[1]), 0, 16);
