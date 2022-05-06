@@ -54,8 +54,8 @@ $style = $scopeConfig->getValue('increazy_checkout/button/css', \Magento\Store\M
         });
 
         function initIncreazy() {
-            var customerId = document.querySelector('meta[name="increazy-customer-logged"]').value;
-            var cartId = document.querySelector('meta[name="increazy-cart-actived"]').value;
+            var customerId = document.querySelector('meta[name="increazy-customer-logged"]').getAttribute('value');
+            var cartId = document.querySelector('meta[name="increazy-cart-actived"]').getAttribute('value');
 
             window.$increazyCheckoutPay(cartId, customerId);
         }

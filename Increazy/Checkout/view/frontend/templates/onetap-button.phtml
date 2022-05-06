@@ -55,7 +55,7 @@ if ($enabledOnetap) {
 
     function increazyOnetap() {
         setTimeout(function () {
-            var customerId = document.querySelector('meta[name="increazy-customer-logged"]').value;
+            var customerId = document.querySelector('meta[name="increazy-customer-logged"]').getAttribute('value');
 
             if ([undefined, null, ''].includes(customerId)) {
                 customerId = localStorage.getItem('increazy-token');
