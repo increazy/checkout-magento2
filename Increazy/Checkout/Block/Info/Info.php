@@ -50,6 +50,12 @@ class Info extends \Magento\Payment\Block\Info
             }
         }
 
+        if (isset($data['internal_order']['details'])) {
+            if (isset($data['internal_order']['details']['installments'])) {
+                $lines .= $this->createLine('Parcelamento', $data['internal_order']['details']['installments']);
+            }
+        }
+
         if (isset($data['custom_inputs'])) {
             if (count($data['custom_inputs']) > 0) {
                 $lines .= '<tr><th colspan="2" style="font-size:18px;text-align:center;padding: 16px 0px;"><b>Campos adicionais</b></th></tr>';
