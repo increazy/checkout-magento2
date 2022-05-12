@@ -52,18 +52,20 @@ class Create extends Controller
     public function action($body)
     {
         $customerId = $this->hashDecode($body->token);
-        $this->collection->loadWithFilter()->addRegionNameFilter($body->state)->load();
+        if ($customerId) {
+            $this->collection->loadWithFilter()->addRegionNameFilter($body->state)->load();
 
-        $region = $this->collection->getData()[0];
-        $body->region_id = $region['region_id'];
+            $region = $this->collection->getData()[0];
+            $body->region_id = $region['region_id'];
 
-        $this->address->setCustomerId($customerId);
+            $this->address->setCustomerId($customerId);
 
-        foreach ($body as $key => $value) {
-            $this->address->setData($key, $value);
+            foreach ($body as $key => $value) {
+                $this->address->setData($key, $value);
+            }
+
+            $this->address->save();
         }
-
-        $this->address->save();
 
         $all = new All($this->context, $this->customer, $this->store, $this->scopeConfig);
         return $all->action($body);

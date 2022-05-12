@@ -33,6 +33,9 @@ class All extends Controller
     public function action($body)
     {
         $customerId = $this->hashDecode($body->token);
+        if (!$customerId) {
+            return [];
+        }
         $this->customer->load($customerId);
 
         return array_values(array_map(function ($address) {

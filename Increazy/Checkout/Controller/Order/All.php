@@ -33,6 +33,10 @@ class All extends Controller
     public function action($body)
     {
         $customerId = $this->hashDecode($body->token);
+        if (!$customerId) {
+            return [];
+        }
+
         $orders = $this->collection->create()
             ->addFieldToSelect('*')
             ->addFieldToFilter('customer_id', $customerId)

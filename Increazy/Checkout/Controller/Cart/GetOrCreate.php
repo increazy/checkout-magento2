@@ -58,8 +58,10 @@ class GetOrCreate extends Controller
 
         if (($body->token ?? '') !== '') {
             $customerId = $this->hashDecode($body->token);
-            $customer = $this->customer->getById($customerId);
-            $quote->assignCustomer($customer);
+            if ($customerId) {
+                $customer = $this->customer->getById($customerId);
+                $quote->assignCustomer($customer);
+            }
 
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $customer = $objectManager->create('Magento\Customer\Model\Customer')->load($customerId);
