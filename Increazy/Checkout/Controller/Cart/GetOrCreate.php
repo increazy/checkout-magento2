@@ -61,12 +61,12 @@ class GetOrCreate extends Controller
             if ($customerId) {
                 $customer = $this->customer->getById($customerId);
                 $quote->assignCustomer($customer);
-            }
 
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $customer = $objectManager->create('Magento\Customer\Model\Customer')->load($customerId);
-            $customerSession = $objectManager->create('Magento\Customer\Model\Session');
-            $customerSession->setCustomerAsLoggedIn($customer);
+                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                $customer = $objectManager->create('Magento\Customer\Model\Customer')->load($customerId);
+                $customerSession = $objectManager->create('Magento\Customer\Model\Session');
+                $customerSession->setCustomerAsLoggedIn($customer);
+            }
         }
 
         $quote->setStoreId($body->store);
