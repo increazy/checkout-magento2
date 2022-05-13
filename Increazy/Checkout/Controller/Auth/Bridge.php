@@ -33,7 +33,7 @@ class Bridge extends Action
         $this->customer = $customer;
         $this->session = $session;
         $this->store = $store;
-        parent::__construct($context, $store);
+        parent::__construct($context);
     }
 
     public function execute()
