@@ -8,9 +8,18 @@ abstract class CompleteQuote
 {
     public static function get(Quote $quote)
     {
+				$shippingAddress = $quote->getShippingAddress();
+        $shippingAddress->setCollectShippingRates(true)->collectShippingRates();
+				$quote->setTotalsCollectedFlag(false)->collectTotals();
+				$quote->collectTotals();
+				$quote->save();
+
+				$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+				$quote = $objectManager->get('Magento\Quote\Model\Quote')->load($quote->getId());
         $data = $quote->getData();
 
         return array_merge($data, [
+						'_edit' => 1,
             'totals'   => self::getTotals($quote),
             'shipping' => self::getShipping($quote),
             'items'    => self::getItems($quote),
