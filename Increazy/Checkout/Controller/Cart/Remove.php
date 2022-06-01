@@ -35,16 +35,15 @@ class Remove extends Controller
 
     public function validate($body)
     {
-        return isset($body->product_id) && isset($body->quote_id);
+        return isset($body->item_id) && isset($body->quote_id);
     }
 
     public function action($body)
     {
         $this->quote->load($body->quote_id);
         $this->quote->setStore($this->store->getStore());
-        $this->product->load($body->product_id);
 
-        $item = $this->quote->getItemByProduct($this->product);
+        $item = $this->quote->getItemById($body->item_id);
         $this->quote->removeItem($item->getId());
 
         $this->quote->collectTotals()->save();
@@ -52,3 +51,4 @@ class Remove extends Controller
         return CompleteQuote::get($this->quote);
     }
 }
+
