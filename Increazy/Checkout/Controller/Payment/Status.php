@@ -64,7 +64,8 @@ class Status extends Controller
     {
         $collection = $this->orderCollectionFactory->create()
             ->addAttributeToSelect('entity_id')
-        ->addFieldToFilter('increazy_transaction_id', $body->order);
+        ->addFieldToFilter('increment_id', $body->conversion->external_order);
+
 
         $order = $collection->getFirstItem();
         $order = $this->orderModel->load($order->getId());

@@ -38,13 +38,12 @@ class Index extends \Magento\Framework\App\Action\Action
         if ($data->order) {
             $collection = $this->orderCollectionFactory->create()
                 ->addAttributeToSelect('entity_id')
-                ->addFieldToFilter('increazy_transaction_id', $data->order);
+                ->addFieldToFilter('increment_id', $data->conversion->external_order);
 
             $orderId = $collection->getFirstItem();
 
             if ($orderId->getId()) {
                 $order = $this->orderModel->load($orderId->getId());
-
                 switch ($data->status) {
                     case 'waiting':
                         if ($order->canHold()) {
