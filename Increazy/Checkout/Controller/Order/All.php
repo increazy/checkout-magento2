@@ -27,7 +27,7 @@ class All extends Controller
 
     public function validate($body)
     {
-        return isset($body->token) && isset($body->payment_data) && isset($body->quote_id);
+        return isset($body->token);
     }
 
     public function action($body)
