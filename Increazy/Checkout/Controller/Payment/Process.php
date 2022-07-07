@@ -14,6 +14,7 @@ class Process extends Controller
      */
     private $order;
 
+    private $orderSender;
 
     public function __construct(
         Context $context,
@@ -23,6 +24,8 @@ class Process extends Controller
     )
     {
         $this->order = $order;
+        $om = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->orderSender = $om->create(\Magento\Sales\Model\Order\Email\Sender\OrderSender::class);
         parent::__construct($context, $store, $scopeConfig);
     }
 
@@ -36,15 +39,12 @@ class Process extends Controller
     public function action($body)
     {
         $this->order->loadByIncrementId($body->order_id);
-
         $paymentData = json_decode(json_encode($body->payment_data), true);
         $this->order->getPayment()->setAdditionalInformation([
             'infos' => $paymentData
         ]);
-        // var_dump(json_encode(get_class_methods($this->order)));
-        // var_dump(json_encode(get_class_methods($this->order->getPayment())));
 
-        $this->order->setEmailSent(1);
+        $this->orderSender->send($this->order);
         $this->order->getPayment()->save();
         $this->order->save();
 

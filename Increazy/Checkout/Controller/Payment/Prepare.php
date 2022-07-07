@@ -10,6 +10,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sales\Model\Order;
 use Magento\Store\Model\StoreManagerInterface;
 
+
 class Prepare extends Controller
 {
     /**
@@ -64,7 +65,7 @@ class Prepare extends Controller
         $this->quote->collectTotals()->save();
 
         $order = $this->quoteManagement->submit($this->quote);
-        $order->setState(Order::STATE_PENDING_PAYMENT);
+        $order->setState(Order::STATE_NEW);
         $order->setTaxAmount($order->getTaxAmount() + $body->tax);
         $order->save();
 
