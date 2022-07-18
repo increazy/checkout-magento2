@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/payment.xsd"
 >
     <groups>
-        <group id="pwa">
+        <group id="increazy">
             <label>Increazy Payment Methods</label>
         </group>
     </groups>
