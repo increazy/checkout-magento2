@@ -70,7 +70,7 @@ abstract class Controller extends Action
         throw new \Exception($msg);
     }
 
-    private function getHash()
+    protected function getHash()
     {
         return $this->scopeConfig->getValue('increazy_general/general/hash', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
