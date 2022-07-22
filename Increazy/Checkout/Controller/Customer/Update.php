@@ -50,10 +50,29 @@ class Update extends Controller
 
     public function action($body)
     {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $customerObj = $objectManager->create('Magento\Customer\Model\ResourceModel\Customer\Collection');
+        $collection = $customerObj
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter([
+                ['attribute' => 'taxvat', 'eq' => $body->taxvat],
+                ['attribute' => 'taxvat', 'eq' => str_replace(['.', '-', '/'], '', $body->taxvat)],
+            ])
+        ->load();
+
+        $response = $collection->getData();
+        $responseID = count($response) > 0 ? $response[0]['entity_id'] : null;
+
         $this->customer->setWebsiteId($this->store->getStore()->getWebsiteId());
         $this->compare->setWebsiteId($this->store->getStore()->getWebsiteId());
 
         $this->compare->loadByEmail($body->email);
+
+        if ($this->compare->getId() != $responseID || $this->customer->getId() != $responseID) {
+            if ($responseID !== null) {
+                return $this->error('CPF já cadastrado');
+            }
+        }
 
         if ($this->customer->getId() !== $this->compare->getId()) {
             $this->error('customer.exists');

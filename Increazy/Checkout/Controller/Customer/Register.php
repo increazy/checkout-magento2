@@ -44,6 +44,22 @@ class Register extends Controller
 
     public function action($body)
     {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $customerObj = $objectManager->create('Magento\Customer\Model\ResourceModel\Customer\Collection');
+        $collection = $customerObj
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter([
+                ['attribute' => 'taxvat', 'eq' => $body->taxvat],
+                ['attribute' => 'taxvat', 'eq' => str_replace(['.', '-', '/'], '', $body->taxvat)],
+            ])
+        ->load();
+
+        $response = $collection->getData();
+
+        if (count($response) > 0) {
+            return $this->error('CPF já cadastrado');
+        }
+
         $this->customer->setWebsiteId($this->store->getStore()->getWebsiteId());
         foreach ($body as $key => $value) {
             if ($key === 'password') {
