@@ -56,6 +56,13 @@ abstract class Controller extends Action
             }
 
             $response = $this->action($body);
+
+            if (isset($response['customer'])) {
+                if (isset($response['customer']['rp_token'])) {
+                    unset($response['customer']['rp_token']);
+                }
+            }
+
             echo json_encode($response);
         } catch (\Exception $e) {
             echo json_encode([
