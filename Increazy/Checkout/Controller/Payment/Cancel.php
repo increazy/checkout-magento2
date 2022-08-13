@@ -59,18 +59,24 @@ class Cancel extends Controller
                     if ($customerId = $this->order->getCustomerId()) {
                         $rule = $objectManager->get('Magento\SalesRule\Model\Rule');
 
-                        if ($customerCoupon = $rule->load($coupon->getId())) {
+
+                        if ($customerCoupon = $rule->load($coupon->getRuleId())) {
                             $customerCoupon->setTimesUsed($customerCoupon->getTimesUsed() - 1);
                             $customerCoupon->save();
                         }
 
                         $usageCustomer = $objectManager->get('Magento\SalesRule\Model\ResourceModel\Coupon\Usage');
                         $usageCustomer->updateCustomerCouponTimesUsed($customerId, $coupon->getId(), false);
+
+                        $quote = $objectManager->get('Magento\Quote\Model\Quote')->load($this->order->getQuoteId());
+                        $quote->setCouponCode($code);
+                        $quote->collectTotals()->save();
                     }
                 }
 
 
                 // $this->registry->register('isSecureArea','true');
+                $this->order->cancel()->save();
                 $this->order->delete();
                 // $this->registry->unregister('isSecureArea');
             }
